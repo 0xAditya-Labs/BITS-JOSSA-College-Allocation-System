@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal - BITS Allocation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Student Portal</h1>
+            <p>Verify OTP to view your result</p>
+        </header>
+
+        <nav class="nav-links">
+            <a href="/">Home</a>
+            <a href="/admin">Admin</a>
+            <a href="/student" class="active">Student</a>
+        </nav>
+
+        <div id="alert-box"></div>
+
+        <div id="not-published" class="alert alert-info">
+            Results have not been published yet. Please check back after the admin runs seat allocation.
+        </div>
+
+        <div class="card">
+            <h2>Step 1: Request OTP</h2>
+            <div class="form-group">
+                <label for="rank">Enter Your Rank</label>
+                <input type="number" id="rank" min="1" placeholder="Your counselling rank" disabled>
+            </div>
+            <button class="btn btn-primary" id="send-otp-btn" disabled>Send OTP to Registered Phone</button>
+        </div>
+
+        <div class="card">
+            <h2>Step 2: Verify OTP &amp; View Result</h2>
+            <div class="form-group">
+                <label for="otp">Enter Received OTP</label>
+                <input type="number" id="otp" placeholder="6-digit OTP" disabled>
+            </div>
+            <button class="btn btn-success" id="verify-otp-btn" disabled>Verify &amp; View Report Card</button>
+
+            <div id="result-box" class="result-box hidden">
+                <h3 style="color:#38bdf8; margin-bottom:0.75rem;">Report Card</h3>
+                <p><strong>Rank:</strong> <span id="res-rank"></span></p>
+                <p><strong>Roll Number:</strong> <span id="res-roll"></span></p>
+                <p><strong>Name:</strong> <span id="res-name"></span></p>
+                <p><strong>Phone:</strong> <span id="res-phone"></span></p>
+                <p id="res-allocation"></p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Download Full Results</h2>
+            <p style="color:#94a3b8; margin-bottom:1rem;">Download the complete placement list as a text file.</p>
+            <a href="/api/download-results" class="btn btn-secondary" id="download-btn" style="pointer-events:none; opacity:0.5">Download students_placement.txt</a>
+        </div>
+
+        <footer>BITS Allocation System &mdash; Student Portal</footer>
+    </div>
+
+    <script>
+        const alertBox = document.getElementById("alert-box");
+        let currentRank = null;
+
+        function showAlert(message, type = "info") {
+            alertBox.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            setTimeout(() => { alertBox.innerHTML = ""; }, 5000);
+        }
+
+        document.getElementById("send-otp-btn").addEventListener("click", async () => {
+            currentRank = parseInt(document.getElementById("rank").value);
+            if (!currentRank) {
+                showAlert("Please enter your rank.", "error");
+                return;
+            }
+
+            const res = await fetch("/api/send-otp", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ rank: currentRank }),
+            });
+            const data = await res.json();
+
+            if (res.ok) {
+                showAlert(data.message, "success");
+            } else {
+                showAlert(data.error, "error");
+            }
+        });
+
+        async function loadStatus() {
+            const res = await fetch("/api/status");
+            const data = await res.json();
+
+            if (data.allocation_done) {
+                document.getElementById("not-published").classList.add("hidden");
+                document.getElementById("rank").disabled = false;
+                document.getElementById("otp").disabled = false;
+                document.getElementById("send-otp-btn").disabled = false;
+                document.getElementById("verify-otp-btn").disabled = false;
+                const dl = document.getElementById("download-btn");
+                dl.style.pointerEvents = "auto";
+                dl.style.opacity = "1";
+            }
+        }
+
+        document.getElementById("verify-otp-btn").addEventListener("click", async () => {
+            const rank = currentRank || parseInt(document.getElementById("rank").value);
+            const otp = parseInt(document.getElementById("otp").value);
+
+            if (!rank || !otp) {
+                showAlert("Enter both rank and OTP.", "error");
+                return;
+            }
+
+            const res = await fetch("/api/verify-otp", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ rank, otp }),
+            });
+            const data = await res.json();
+
+            if (res.ok) {
+                showAlert(data.message, "success");
+                const r = data.result;
+                document.getElementById("res-rank").textContent = r.rank;
+                document.getElementById("res-roll").textContent = r.roll_no;
+                document.getElementById("res-name").textContent = r.name;
+                document.getElementById("res-phone").textContent = r.phone;
+
+                const allocEl = document.getElementById("res-allocation");
+                if (r.qualified) {
+                    allocEl.innerHTML = `<span class="qualified">Campus Allocated: ${r.campus}<br>Branch: ${r.branch}</span>`;
+                } else {
+                    allocEl.innerHTML = `<span class="not-qualified">${r.message}</span>`;
+                }
+
+                document.getElementById("result-box").classList.remove("hidden");
+            } else {
+                showAlert(data.error, "error");
+            }
+        });
+
+        loadStatus();
+    </script>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal - BITS Allocation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Admin Portal</h1>
+            <p>Add students and run seat allocation</p>
+        </header>
+
+        <nav class="nav-links">
+            <a href="/">Home</a>
+            <a href="/admin" class="active">Admin</a>
+            <a href="/student">Student</a>
+        </nav>
+
+        <div id="alert-box"></div>
+
+        <div class="card">
+            <h2>Add Student</h2>
+            <form id="add-student-form">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" required placeholder="Student name">
+                </div>
+                <div class="form-group">
+                    <label for="roll_no">Roll Number</label>
+                    <input type="number" id="roll_no" required placeholder="e.g. 2024001">
+                </div>
+                <div class="form-group">
+                    <label for="rank">Rank</label>
+                    <input type="number" id="rank" required min="1" placeholder="e.g. 1">
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number (OTP will be sent here)</label>
+                    <input type="text" id="phone" required placeholder="10-digit number without +91">
+                </div>
+                <div class="form-group">
+                    <label>College Preferences (in order)</label>
+                    <div class="choices-row">
+                        <select id="pref1" required>
+                            <option value="">Pref 1</option>
+                            <option value="1">1 - Pilani CSE</option>
+                            <option value="2">2 - Goa CSE</option>
+                            <option value="3">3 - Pilani ECE</option>
+                            <option value="4">4 - Goa ECE</option>
+                        </select>
+                        <select id="pref2">
+                            <option value="">Pref 2</option>
+                            <option value="1">1 - Pilani CSE</option>
+                            <option value="2">2 - Goa CSE</option>
+                            <option value="3">3 - Pilani ECE</option>
+                            <option value="4">4 - Goa ECE</option>
+                        </select>
+                        <select id="pref3">
+                            <option value="">Pref 3</option>
+                            <option value="1">1 - Pilani CSE</option>
+                            <option value="2">2 - Goa CSE</option>
+                            <option value="3">3 - Pilani ECE</option>
+                            <option value="4">4 - Goa ECE</option>
+                        </select>
+                        <select id="pref4">
+                            <option value="">Pref 4</option>
+                            <option value="1">1 - Pilani CSE</option>
+                            <option value="2">2 - Goa CSE</option>
+                            <option value="3">3 - Pilani ECE</option>
+                            <option value="4">4 - Goa ECE</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" id="add-btn">Add Student</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Registered Students <span class="badge" id="student-count">0</span></h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Roll No</th>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Preferences</th>
+                    </tr>
+                </thead>
+                <tbody id="students-table">
+                    <tr><td colspan="5" style="color:#64748b">No students added yet.</td></tr>
+                </tbody>
+            </table>
+
+            <div class="btn-group">
+                <button class="btn btn-success" id="run-allocation-btn">Run Seat Allocation</button>
+                <a href="/api/download-results" class="btn btn-secondary hidden" id="download-btn">Download Results (.txt)</a>
+            </div>
+            <p id="allocation-info" style="margin-top:1rem; color:#94a3b8; font-size:0.9rem;"></p>
+        </div>
+
+        <footer>BITS Allocation System &mdash; Admin Portal</footer>
+    </div>
+
+    <script>
+        const alertBox = document.getElementById("alert-box");
+
+        function showAlert(message, type = "info") {
+            alertBox.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            setTimeout(() => { alertBox.innerHTML = ""; }, 5000);
+        }
+
+        async function loadStudents() {
+            const res = await fetch("/api/students");
+            const data = await res.json();
+            const tbody = document.getElementById("students-table");
+            document.getElementById("student-count").textContent = data.count;
+
+            if (data.count === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="color:#64748b">No students added yet.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = data.students.map(s => `
+                <tr>
+                    <td>${s.rank}</td>
+                    <td>${s.roll_no}</td>
+                    <td>${s.name}</td>
+                    <td>${s.phone}</td>
+                    <td>${s.choices.join(" &rarr; ")}</td>
+                </tr>
+            `).join("");
+        }
+
+        async function loadStatus() {
+            const res = await fetch("/api/status");
+            const data = await res.json();
+
+            if (data.allocation_done) {
+                document.getElementById("add-btn").disabled = true;
+                document.getElementById("run-allocation-btn").disabled = true;
+                document.getElementById("download-btn").classList.remove("hidden");
+                document.getElementById("allocation-info").textContent =
+                    `Allocation complete. Sorting algorithm used: ${data.sorting_algorithm}. Seats filled: ${data.seats_filled}/${data.student_count}.`;
+            }
+        }
+
+        document.getElementById("add-student-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const choices = ["pref1", "pref2", "pref3", "pref4"]
+                .map(id => document.getElementById(id).value)
+                .filter(v => v !== "")
+                .map(Number);
+
+            const payload = {
+                name: document.getElementById("name").value,
+                roll_no: parseInt(document.getElementById("roll_no").value),
+                rank: parseInt(document.getElementById("rank").value),
+                phone: document.getElementById("phone").value,
+                choices: choices,
+            };
+
+            const res = await fetch("/api/students", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+            });
+            const data = await res.json();
+
+            if (res.ok) {
+                showAlert(data.message, "success");
+                e.target.reset();
+                loadStudents();
+            } else {
+                showAlert(data.error, "error");
+            }
+        });
+
+        document.getElementById("run-allocation-btn").addEventListener("click", async () => {
+            if (!confirm("Run seat allocation? This cannot be undone.")) return;
+
+            const res = await fetch("/api/run-allocation", { method: "POST" });
+            const data = await res.json();
+
+            if (res.ok) {
+                showAlert(
+                    `${data.message} Algorithm: ${data.sorting_algorithm}. Allocated: ${data.students_allocated}/${data.total_students}.`,
+                    "success"
+                );
+                loadStatus();
+            } else {
+                showAlert(data.error, "error");
+            }
+        });
+
+        loadStudents();
+        loadStatus();
+    </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+(1)   In choice_order and seat allocation systems we can add functionality of : delete , add , update 
+        def change_data(rank):
+    print("Enter 1 to delete a preference")
+    print("Enter 2 to update a preference")
+    print("Enter 3 to add a preference ")
+    ch=int(input("Enter your operation : "))
+    if ch==1:
+        pref=int(input("Enter preference code to delete : "))
+        try:
+            // yet to be updated
+
+
+    if ch==2:
+        pref_number=int(input("Enter your preference number to be updated : "))
+        index=pref_number-1               # at index that colg-branch code is stored 
+
+
+
+
+
+(2) We can add muti-Round systems and CSAB rounds 
+
+(3) filters that avoid ambiguity
+    like same roll_no or same rank....
+    (Well it isnt expected becz data is fetched from another file i.e. verified)
+
+(4) We can read and return data at day of result by reading the file in which we have stored the data
+
+(5) We can also add password generator for one more layer of protection
+
+(6) 
+

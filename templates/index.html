@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BITS Seat Allocation Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>BITS Seat Allocation Portal</h1>
+            <p>JOSSA-style counselling with OTP-secured result access</p>
+        </header>
+
+        <div class="portal-grid">
+            <div class="portal-card">
+                <h3>Admin Portal</h3>
+                <p>Register students, collect preferences, and run seat allocation when counselling closes.</p>
+                <a href="/admin" class="btn btn-primary">Go to Admin</a>
+            </div>
+            <div class="portal-card">
+                <h3>Student Portal</h3>
+                <p>Verify your identity via OTP and view your allocation result. Download the full results file.</p>
+                <a href="/student" class="btn btn-success">Go to Student</a>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 2rem;">
+            <h2>College Codes</h2>
+            <table>
+                <tr><th>Code</th><th>Campus</th><th>Branch</th></tr>
+                <tr><td>1</td><td>Pilani</td><td>CSE</td></tr>
+                <tr><td>2</td><td>Goa</td><td>CSE</td></tr>
+                <tr><td>3</td><td>Pilani</td><td>ECE</td></tr>
+                <tr><td>4</td><td>Goa</td><td>ECE</td></tr>
+            </table>
+            <p style="margin-top: 1rem; color: #94a3b8; font-size: 0.9rem;">
+                Total seats available: 8 (2 per college-branch combination)
+            </p>
+        </div>
+
+        <footer>BITS Allocation System &mdash; Powered by Flask &amp; Twilio</footer>
+    </div>
+</body>
+</html>
