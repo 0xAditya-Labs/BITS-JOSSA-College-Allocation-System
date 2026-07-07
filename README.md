@@ -30,7 +30,7 @@ Total seats: **8** (2 per college-branch combination)
 ### 1. Clone the repository
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/0xAditya-Labs/BITS-JOSSA-College-Allocation-System.git
 cd "BITS Allocation Python"
 ```
 
@@ -99,13 +99,13 @@ Open [http://localhost:5000](http://localhost:5000) in your browser.
 ## Project Structure
 
 ```
-├── app.py                          # Flask web server (main entry point)
+├── app.py                          # Flask web server 
 ├── allocation.py                   # Seat allocation logic
 ├── sorting.py                      # Sorting algorithms (random selection)
 ├── twilio_otp.py                   # OTP generation & Twilio SMS
-├── choice_order_and_seat_allocation.py  # Original CLI script (legacy)
-├── Twilio_OTP_send.py              # Original OTP module (legacy)
-├── getresult.py                    # Original result viewer (legacy)
+├── choice_order_and_seat_allocation.py  # Original CLI script 
+├── Twilio_OTP_send.py              # Original OTP module 
+├── getresult.py                    # Original result viewer 
 ├── templates/
 │   ├── index.html                  # Home page
 │   ├── admin.html                  # Admin portal
@@ -113,7 +113,7 @@ Open [http://localhost:5000](http://localhost:5000) in your browser.
 ├── static/
 │   └── style.css                   # Frontend styles
 ├── students_placement.txt          # Generated results file
-├── .env.example                    # Env template (safe for GitHub)
+├── .env.example                    # Env template 
 ├── .env                            # Your local credentials (gitignored)
 ├── requirements.txt
 └── README.md
@@ -146,7 +146,7 @@ The repo is safe to push as-is:
 git init
 git add .
 git commit -m "Initial commit: BITS seat allocation portal"
-git remote add origin <your-repo-url>
+git remote add origin https://github.com/0xAditya-Labs/BITS-JOSSA-College-Allocation-System.git
 git push -u origin main
 ```
 
