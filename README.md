@@ -1,270 +1,287 @@
-JOSSA-Style Seat Allocation Portal
+<div align="center">
 
-Live Demo: https://bits-jossa-college-allocation-syste.vercel.app/
+# JOSSA-Style Seat Allocation Portal
 
-A streamlined, JOSSA-style seat allocation system designed to efficiently manage student data, facilitate seat allocation based on preferences and rank, and ensure secure access to placement information. Originally built as a terminal-based application, it has been upgraded to a Flask web portal with OTP-secured student result access via Twilio SMS.
+A Flask-based web application that simulates the JOSAA counselling process by allocating seats based on student rank, preferences, and seat availability. The portal includes secure OTP-based authentication using Twilio, an admin dashboard, and downloadable allocation reports.
 
-Academic Context
+### Live Demo
 
-This system was conceptualized and developed by B.Tech 2nd Semester Computer Science and Engineering students: Aditya, Adarsh, Bhimansh, and Jithender. The project was executed under the supervision of Dr. Kusum Bharti at Dr. B.R. Ambedkar National Institute of Technology, Jalandhar.
+https://bits-jossa-college-allocation-syste.vercel.app/
 
-Features
+<br>
 
-Admin Portal — Register students with personal details (name, roll number, rank, phone number) and up to four college preferences, and execute the seat allocation engine.
+![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-Web_App-000000?style=for-the-badge&logo=flask)
+![Twilio](https://img.shields.io/badge/Twilio-OTP-F22F46?style=for-the-badge&logo=twilio)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+![Deployment](https://img.shields.io/badge/Deployment-Vercel-black?style=for-the-badge&logo=vercel)
 
-Student Portal & Security — OTP verification is implemented to ensure secure access to placement information. Students must authenticate their identity before viewing their allocated campus and branch.
+</div>
 
-Downloadable Results — Full placement list exported as a permanent text file (students_placement.txt).
+---
 
-Random Sorting Algorithm — Each allocation run picks one of five sorting algorithms at random:
+# Overview
 
-Bubble Sort
+This project recreates a simplified version of the JOSAA seat allocation workflow through an interactive web portal.
 
-Insertion Sort
+Students register their counselling preferences, administrators execute the allocation engine, and students securely access their allocated seat after OTP verification via Twilio SMS.
 
-Selection Sort
+Originally implemented as a command-line application, the project was redesigned into a Flask web application with a cleaner architecture, REST APIs, and a responsive user interface.
 
-Merge Sort
+---
 
-Quick Sort
+# Key Features
 
-Twilio OTP Verification In Action
+### Admin Dashboard
 
-When a student inputs their rank, the system fetches their registered phone number, generates a 6-digit OTP, and dispatches it via the Twilio REST API.
+- Register students
+- Store rank and preference order
+- Execute seat allocation
+- Download allocation results
 
-College Codes
+### Student Portal
 
-Code
+- Login using Rank
+- OTP verification through Twilio
+- Secure access to allocated seat
 
-Campus
+### Seat Allocation Engine
 
-Branch
+- Preference-based allocation
+- Seat availability validation
+- Randomized sorting algorithm implementation
 
-1
+### Export Results
 
-Pilani
+- Download final allocation report
+- Generates `students_placement.txt`
 
-CSE
+---
 
-2
+# Tech Stack
 
-Goa
+| Category | Technologies |
+|-----------|--------------|
+| Backend | Python, Flask |
+| Frontend | HTML, CSS, JavaScript |
+| Authentication | Twilio SMS OTP |
+| Deployment | Vercel |
+| Data Storage | File-based |
+| Algorithms | Bubble, Selection, Insertion, Merge & Quick Sort |
 
-CSE
+---
 
-3
+# Screenshots
 
-Pilani
+## Portal Interface
 
-ECE
+<p align="center">
+<img src="./static/UI.png" width="900">
+</p>
 
-4
+---
 
-Goa
+## OTP Authentication
 
-ECE
+<p align="center">
+<img src="./static/OTP_screenshot.jpg" width="420">
+</p>
 
-Total seats: 8 (2 per college-branch combination)
+---
 
-Setup & Installation
+## Seat Allocation Workflow
 
-1. Clone the repository
+<p align="center">
+<img src="./static/Flow_chart.jpg" width="900">
+</p>
 
-<<<<<<< HEAD
-git clone <your-repo-url>
-=======
-```bash
-git clone https://github.com/0xAditya-Labs/BITS-JOSSA-College-Allocation-System.git
->>>>>>> 61e91b53b47bc9d7b3f35abe58afb0cbba0a352b
-cd "BITS Allocation Python"
+---
 
+# How It Works
 
-2. Create a virtual environment
-
-python -m venv venv
-
-# Windows
-venv\Scripts\activate
-
-# macOS / Linux
-source venv/bin/activate
-
-
-3. Install dependencies
-
-pip install -r requirements.txt
-
-
-4. Configure Twilio credentials
-
-Copy the example env file and add your Twilio credentials. These credentials (account SID, auth token, and Twilio phone number) are required to authorize the Twilio Client.
-
-cp .env.example .env
-
-
-Edit .env with your values from the Twilio Console:
-
-TWILIO_ACCOUNT_SID=ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-TWILIO_AUTH_TOKEN=your_auth_token
-TWILIO_PHONE_NUMBER=+1xxxxxxxxxx
-FLASK_SECRET_KEY=some-random-secret-string
-
-
-Important: .env is listed in .gitignore and will not be pushed to GitHub. Only .env.example (with placeholder values) is committed.
-
-5. Run the application
-
-python app.py
-
-
-Open http://localhost:5000 in your browser.
-
-Usage Flow
-
-Admin Flow
-
-Go to Admin Portal (/admin).
-
-Input student credentials and preference choices, which are temporarily stored in a dictionary before file processing.
-
-Click Run Seat Allocation. Seats are allocated based on student preferences and availability, ensuring fair distribution.
-
-Download the results file from the admin page.
-
-Student Flow
-
-Go to Student Portal (/student).
-
-Enter your rank and click Send OTP.
-
-Check your registered phone for the SMS.
-
-Enter the received OTP. If the OTP matches, access is granted to the report card.
-
-View details including roll number, name, phone number, and allocated campus/branch.
-
-Project Structure
-
-<<<<<<< HEAD
-├── app.py                          # Flask web server (main entry point)
-=======
+```text
+                Admin Portal
+                     │
+                     ▼
+           Register Students
+                     │
+                     ▼
+        Store Preferences & Rank
+                     │
+                     ▼
+       Execute Seat Allocation
+                     │
+                     ▼
+        Generate Allocation File
+                     │
+      ┌──────────────┴──────────────┐
+      ▼                             ▼
+ Student Portal                Download Results
+      │
+      ▼
+ Enter Rank
+      │
+      ▼
+ Send OTP via Twilio
+      │
+      ▼
+ Verify OTP
+      │
+      ▼
+ View Allocation Result
 ```
-├── app.py                          # Flask web server 
->>>>>>> 61e91b53b47bc9d7b3f35abe58afb0cbba0a352b
-├── allocation.py                   # Seat allocation logic
-├── sorting.py                      # Sorting algorithms (random selection)
-├── twilio_otp.py                   # OTP generation & Twilio SMS
-├── choice_order_and_seat_allocation.py  # Original CLI script 
-├── Twilio_OTP_send.py              # Original OTP module 
-├── getresult.py                    # Original result viewer 
-├── templates/
-│   ├── index.html                  # Home page
-│   ├── admin.html                  # Admin portal
-│   └── student.html                # Student portal
-├── static/
-│   └── style.css                   # Frontend styles
-│   ├── UI.jpg                      # Admin/Student Portal UI
-│   └── OTP_screenshot.jpg          # Twilio SMS preview
-├── students_placement.txt          # Generated results file
-├── .env.example                    # Env template 
-├── .env                            # Your local credentials (gitignored)
+
+---
+
+# College Codes
+
+| Code | Campus | Branch |
+|------:|---------|---------|
+| 1 | Pilani | CSE |
+| 2 | Goa | CSE |
+| 3 | Pilani | ECE |
+| 4 | Goa | ECE |
+
+**Seat Capacity**
+
+- Total Seats : **8**
+- 2 seats per Campus-Branch combination
+
+---
+
+# Project Structure
+
+```text
+.
+├── app.py
+├── allocation.py
+├── sorting.py
+├── twilio_otp.py
+├── templates
+│   ├── index.html
+│   ├── admin.html
+│   └── student.html
+│
+├── static
+│   ├── UI.png
+│   ├── OTP_screenshot.jpg
+│   ├── Flow_chart.jpg
+│   └── style.css
+│
 ├── requirements.txt
-└── README.md
-
-
-API Endpoints
-
-Method
-
-Endpoint
-
-Description
-
-<<<<<<< HEAD
-GET
-=======
-```bash
-git init
-git add .
-git commit -m "Initial commit: BITS seat allocation portal"
-git remote add origin https://github.com/0xAditya-Labs/BITS-JOSSA-College-Allocation-System.git
-git push -u origin main
+├── .env.example
+├── README.md
+└── students_placement.txt
 ```
->>>>>>> 61e91b53b47bc9d7b3f35abe58afb0cbba0a352b
 
-/
+---
 
-Home page
+# API Endpoints
 
-GET
+| Method | Endpoint | Description |
+|---------|----------|-------------|
+| GET | `/` | Home Page |
+| GET | `/admin` | Admin Dashboard |
+| GET | `/student` | Student Portal |
+| GET | `/api/students` | Retrieve Students |
+| POST | `/api/students` | Register Student |
+| POST | `/api/run-allocation` | Execute Allocation |
+| POST | `/api/send-otp` | Send OTP |
+| POST | `/api/verify-otp` | Verify OTP |
+| GET | `/api/download-results` | Download Allocation Report |
+| GET | `/api/status` | Application Status |
 
-/admin
+---
 
-Admin portal
+# Local Setup
 
-GET
+## Clone Repository
 
-/student
+```bash
+git clone <repository-url>
+cd "BITS Allocation Python"
+```
 
-Student portal
+---
 
-GET
+## Create Virtual Environment
 
-/api/students
+```bash
+python -m venv venv
+```
 
-List registered students
+### Windows
 
-POST
+```bash
+venv\Scripts\activate
+```
 
-/api/students
+### Linux / macOS
 
-Add a student
+```bash
+source venv/bin/activate
+```
 
-POST
+---
 
-/api/run-allocation
+## Install Dependencies
 
-Run seat allocation
+```bash
+pip install -r requirements.txt
+```
 
-POST
+---
 
-/api/send-otp
+## Configure Environment Variables
 
-Send OTP to student
+Create a `.env` file.
 
-POST
+```env
+TWILIO_ACCOUNT_SID=xxxxxxxxxxxxxxxxxxxxxxxx
+TWILIO_AUTH_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxx
+TWILIO_PHONE_NUMBER=+1xxxxxxxxxx
+FLASK_SECRET_KEY=your_secret_key
+```
 
-/api/verify-otp
+---
 
-Verify OTP & get result
+## Run
 
-GET
+```bash
+python app.py
+```
 
-/api/download-results
+Application will start on
 
-Download placement txt file
+```
+http://localhost:5000
+```
 
-GET
+---
 
-/api/status
+# Future Improvements
 
-System status
+- MySQL/PostgreSQL integration
+- Multi-round counselling support
+- Admin authentication
+- Editable student preferences
+- CSV import/export
+- Analytics dashboard
+- Email notifications
+- Docker deployment
+- Unit testing
+- CI/CD pipeline using GitHub Actions
 
-Future Scope
+---
 
-While the current implementation manages the core workflows of data entry, preference management, and allocation, future iterations of the project are planned to include:
+# License
 
-Database Integration: Migrating from file-based storage to MySQL to add flexibility and advanced functionalities.
+Licensed under the **MIT License**.
 
-CRUD Operations: Adding the ability to delete, add, and update choice orders and database information within a given deadline.
+---
 
-Advanced Counseling: Incorporating multi-round systems and CSAB rounds for real-world scaling.
+<div align="center">
 
-Data Validation: Implementing strict filters to avoid data ambiguity, such as duplicate roll numbers or ranks.
+Made with **Flask**, **Python**, and **Twilio**
 
-Direct SMS Reporting: Sending the final allocated college and branch directly via SMS on result day, alongside the OTP.
-
-Enhanced Security: Adding a password generator to provide an additional layer of account protection.
-
-License
-MIT
+</div>
