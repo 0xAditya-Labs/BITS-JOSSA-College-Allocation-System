@@ -70,7 +70,12 @@ Setup & Installation
 
 1. Clone the repository
 
+<<<<<<< HEAD
 git clone <your-repo-url>
+=======
+```bash
+git clone https://github.com/0xAditya-Labs/BITS-JOSSA-College-Allocation-System.git
+>>>>>>> 61e91b53b47bc9d7b3f35abe58afb0cbba0a352b
 cd "BITS Allocation Python"
 
 
@@ -140,13 +145,18 @@ View details including roll number, name, phone number, and allocated campus/bra
 
 Project Structure
 
+<<<<<<< HEAD
 ├── app.py                          # Flask web server (main entry point)
+=======
+```
+├── app.py                          # Flask web server 
+>>>>>>> 61e91b53b47bc9d7b3f35abe58afb0cbba0a352b
 ├── allocation.py                   # Seat allocation logic
 ├── sorting.py                      # Sorting algorithms (random selection)
 ├── twilio_otp.py                   # OTP generation & Twilio SMS
-├── choice_order_and_seat_allocation.py  # Original CLI script (legacy)
-├── Twilio_OTP_send.py              # Original OTP module (legacy)
-├── getresult.py                    # Original result viewer (legacy)
+├── choice_order_and_seat_allocation.py  # Original CLI script 
+├── Twilio_OTP_send.py              # Original OTP module 
+├── getresult.py                    # Original result viewer 
 ├── templates/
 │   ├── index.html                  # Home page
 │   ├── admin.html                  # Admin portal
@@ -156,7 +166,7 @@ Project Structure
 │   ├── UI.jpg                      # Admin/Student Portal UI
 │   └── OTP_screenshot.jpg          # Twilio SMS preview
 ├── students_placement.txt          # Generated results file
-├── .env.example                    # Env template (safe for GitHub)
+├── .env.example                    # Env template 
 ├── .env                            # Your local credentials (gitignored)
 ├── requirements.txt
 └── README.md
@@ -170,7 +180,17 @@ Endpoint
 
 Description
 
+<<<<<<< HEAD
 GET
+=======
+```bash
+git init
+git add .
+git commit -m "Initial commit: BITS seat allocation portal"
+git remote add origin https://github.com/0xAditya-Labs/BITS-JOSSA-College-Allocation-System.git
+git push -u origin main
+```
+>>>>>>> 61e91b53b47bc9d7b3f35abe58afb0cbba0a352b
 
 /
 
