@@ -97,6 +97,14 @@ Originally implemented as a command-line application, the project was redesigned
 
 ---
 
+## Rank List made
+
+<p align="center">
+<img src="./static/Rank list.png" width="900">
+</p>
+
+---
+
 # How It Works
 
 ```text
